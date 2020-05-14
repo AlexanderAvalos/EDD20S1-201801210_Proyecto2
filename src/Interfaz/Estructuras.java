@@ -9,6 +9,7 @@ import Biblioteca.ArbolB;
 import Biblioteca.AVL;
 import Usuarios.TablaHash;
 import Block.ListaSimple;
+import Block.NodoRed;
 import Usuarios.ListaDoble;
 
 /**
@@ -22,6 +23,7 @@ public class Estructuras {
     private static TablaHash tablahash;
     private static ListaSimple lista;
     private static ListaDoble listaDoble;
+    private static NodoRed nodo;
 
     public Estructuras() {
         this.arbolB = new ArbolB();
@@ -29,6 +31,15 @@ public class Estructuras {
         this.tablahash = new TablaHash();
         this.lista = new ListaSimple();
         this.listaDoble = new ListaDoble();
+        this.nodo = new NodoRed();
+    }
+
+    public static NodoRed getNodo() {
+        return nodo;
+    }
+
+    public static void setNodo(NodoRed nodo) {
+        Estructuras.nodo = nodo;
     }
 
     public static ListaDoble getListaDoble() {

@@ -12,14 +12,14 @@ package Block;
 public class Nodo {
 
     private Nodo siguiente;
-    private Dato valor;
+    private int valor;
 
     public Nodo() {
-        this.valor = null;
+        this.valor = 0;
         this.siguiente = null;
     }
 
-    public Nodo(Dato valor) {
+    public Nodo(int valor) {
         this.valor = valor;
         this.siguiente = null;
     }
@@ -32,11 +32,11 @@ public class Nodo {
         this.siguiente = siguiente;
     }
 
-    public Dato getValor() {
+    public int getValor() {
         return valor;
     }
 
-    public void setValor(Dato valor) {
+    public void setValor(int valor) {
         this.valor = valor;
     }
 

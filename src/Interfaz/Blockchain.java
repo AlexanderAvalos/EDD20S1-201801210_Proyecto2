@@ -5,10 +5,14 @@
  */
 package Interfaz;
 
+import Block.Nodo;
+import Block.NodoRed;
+import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.SocketException;
+import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -17,13 +21,12 @@ import java.util.logging.Logger;
  * @author Alex
  */
 public class Blockchain extends javax.swing.JFrame {
-
     /**
      * Creates new form Blockchain
      */
     public Blockchain() {
         initComponents();
-       
+
     }
 
     /**
@@ -36,8 +39,9 @@ public class Blockchain extends javax.swing.JFrame {
     private void initComponents() {
 
         puerto = new javax.swing.JLabel();
-        jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
+        jButton3 = new javax.swing.JButton();
+        jButton4 = new javax.swing.JButton();
+        jTextField1 = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         addWindowListener(new java.awt.event.WindowAdapter() {
@@ -46,21 +50,23 @@ public class Blockchain extends javax.swing.JFrame {
             }
         });
 
-        puerto.setText("Puerto: 5000");
+        puerto.setText("Puerto: ");
 
-        jButton1.setText("cliente");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        jButton3.setText("Sincronizar");
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                jButton3ActionPerformed(evt);
             }
         });
 
-        jButton2.setText("servidor");
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
+        jButton4.setText("Conectar");
+        jButton4.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
+                jButton4ActionPerformed(evt);
             }
         });
+
+        jTextField1.setText("Colocar Puerto a conectar");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -69,96 +75,44 @@ public class Blockchain extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(puerto, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jTextField1, javax.swing.GroupLayout.DEFAULT_SIZE, 172, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jButton1)
-                        .addGap(18, 18, 18)
-                        .addComponent(jButton2)))
-                .addContainerGap(238, Short.MAX_VALUE))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(puerto, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                .addComponent(jButton4, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(jButton3, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                        .addGap(0, 0, Short.MAX_VALUE)))
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(puerto)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton1)
-                    .addComponent(jButton2))
-                .addContainerGap(241, Short.MAX_VALUE))
+                .addComponent(jButton4)
+                .addGap(36, 36, 36)
+                .addComponent(jButton3)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
-
+    
     }//GEN-LAST:event_formWindowOpened
 
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        servidor();        // TODO add your handling code here:
-    }//GEN-LAST:event_jButton2ActionPerformed
+    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    }//GEN-LAST:event_jButton4ActionPerformed
 
-        try {
-            cliente();
-        } catch (SocketException ex) {
-            Logger.getLogger(Blockchain.class.getName()).log(Level.SEVERE, null, ex);
-        }        // TODO add your handling code here:
-    }//GEN-LAST:event_jButton1ActionPerformed
-    private void servidor() {
-        final int PUERTO = 5000;
-        byte[] buffer = new byte[1024];
-        try {
-            System.out.println("iniciando");
-            DatagramSocket socketUDP = new DatagramSocket(PUERTO);
-            while (true) {
-
-                DatagramPacket peticion = new DatagramPacket(buffer, buffer.length);
-
-                socketUDP.receive(peticion);
-
-                System.out.println("recibo informacion");
-                String mensaje = new String(peticion.getData());
-                System.out.println(mensaje);
-
-                int puertoCliente = peticion.getPort();
-                InetAddress direccion = peticion.getAddress();
-
-                mensaje = "hola desde servidor";
-                buffer = mensaje.getBytes();
-                DatagramPacket Respuesta = new DatagramPacket(buffer, buffer.length, direccion, puertoCliente);
-
-                System.out.println("envio informacion");
-                socketUDP.send(Respuesta);
-            }
-
-        } catch (Exception e) {
-            System.out.println("error conexion servidor");
-        }
-    }
-
-    private void cliente() throws SocketException {
-        final int PUERTO_SERVIDOR = 5000;
-        byte[] buffer = new byte[1024];
-        try {
-            InetAddress direccion = InetAddress.getByName("localhost");
-            DatagramSocket socketUDP = new DatagramSocket();
-            String mensaje = "hola mundo cliente";
-            buffer = mensaje.getBytes();
-            DatagramPacket pregunta = new DatagramPacket(buffer, buffer.length, direccion, PUERTO_SERVIDOR);
-            socketUDP.send(pregunta);
-            DatagramPacket peticion = new DatagramPacket(buffer, buffer.length);
-            socketUDP.receive(peticion);
-            mensaje = new String(peticion.getData());
-            System.out.println(mensaje);
-            puerto.setText("Puerto: " + String.valueOf(socketUDP.getPort()));
-            socketUDP.close();
-        } catch (Exception e) {
-            System.out.println("error conexion cliente");
-        }
-    }
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jButton3ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -198,8 +152,9 @@ public class Blockchain extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
+    private javax.swing.JButton jButton3;
+    private javax.swing.JButton jButton4;
+    private javax.swing.JTextField jTextField1;
     private javax.swing.JLabel puerto;
     // End of variables declaration//GEN-END:variables
 }

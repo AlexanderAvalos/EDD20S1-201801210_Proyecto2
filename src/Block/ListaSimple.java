@@ -25,7 +25,7 @@ public class ListaSimple {
         return false;
     }
 
-    public void insertar(Dato valor) {
+    public void insertar(int valor) {
         Nodo nuevo = new Nodo();
         if (vacio()) {
             nuevo = new Nodo(valor);
@@ -38,7 +38,7 @@ public class ListaSimple {
         }
     }
 
-    public Nodo buscar(Dato data) {
+    public Nodo buscar(int data) {
         Nodo aux = new Nodo();
         aux = primero;
         while (aux != null) {
@@ -49,7 +49,7 @@ public class ListaSimple {
         return null;
     }
 
-    public void eliminar(Dato data) {
+    public void eliminar(int data) {
         Nodo aux = new Nodo();
         Nodo auxb = buscar(data);
         aux = primero;
@@ -103,16 +103,16 @@ public class ListaSimple {
         Nodo aux = new Nodo();
         aux = primero;
         while (aux != null) {
-            sw.println(aux.getValor().dato + "[label = \"" + aux.getValor().dato + "\" ;");
+            sw.println(aux.getValor() + "[label = \"" + aux.getValor() + "\" ;");
             aux = aux.getSiguiente();
         }
         aux = primero;
         while (aux != null) {
             if (aux == primero) {
-                sw.print(aux.getValor().dato);
+                sw.print(aux.getValor());
                 aux = aux.getSiguiente();
             } else {
-                sw.print(aux.getValor().dato + "->");
+                sw.print(aux.getValor() + "->");
                 aux = aux.getSiguiente();
             }
         }

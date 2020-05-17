@@ -18,26 +18,27 @@ import Interfaz.Biblioteca;
 public class AVL {
 
     private JComboBox catalogo = new JComboBox();
-    private NodoAvl root = null;
+    private NodoAvl raiz = null;
     private boolean derecha, izquierda;
     private boolean match = false;
     private String titulos;
     private NodoAvl busqueda = null;
     private NodoAvl au = null;
+    private NodoAvl resultadobusqueda = null;
 
     public JComboBox valor() {
         catalogo.removeAllItems();
-        post(this.root);
+        post(this.raiz);
         return catalogo;
     }
 
     public void insertar(String valor, int carnet) {
-        root = insert(valor, root, carnet);
-        enlazar(root, null);
+        raiz = insert(valor, raiz, carnet);
+        enlazar(raiz, null);
     }
 
     public void impr() {
-        imprimir(this.root, null);
+        imprimir(this.raiz, null);
     }
 
     private void imprimir(NodoAvl nodo, NodoAvl padre) {
@@ -65,7 +66,7 @@ public class AVL {
     }
 
     public NodoAvl serch(int libro) {
-        recorrer(this.root, libro);
+        recorrer(this.raiz, libro);
         return busqueda;
     }
 
@@ -85,7 +86,7 @@ public class AVL {
     }
 
     public String buscar(String texto) {
-        recorrer1(root, texto);
+        recorrer1(raiz, texto);
         return titulos;
     }
 
@@ -203,10 +204,14 @@ public class AVL {
     }
 
     public void eliminar(String valor) {
-        NodoAvl nodo = buscar(valor, root, null);
+        busqueda(raiz, valor);
         match = false;
-        enlazar(root, null);
-        delete(nodo);
+        enlazar(raiz, null);
+        if (resultadobusqueda != null) {
+            delete(resultadobusqueda);
+        } else {
+            System.out.println("no se encontro");
+        }
     }
 
     private void delete(NodoAvl nodo) {
@@ -238,7 +243,7 @@ public class AVL {
     private NodoAvl caso1(NodoAvl nodo) {
         NodoAvl nodopapa = nodo.getPadre();
         if (nodo.getPadre() == null) {
-            root = null;
+            raiz = null;
             return null;
         } else {
             NodoAvl izquierdo = nodopapa.getIzquierda();
@@ -252,7 +257,7 @@ public class AVL {
                         nodo.getPadre().setDerecha(null);
                     }
                 }
-                colocarAlturas(root);
+                colocarAlturas(raiz);
             }
         }
         return nodopapa;
@@ -260,8 +265,8 @@ public class AVL {
 
     private NodoAvl caso2(NodoAvl nodo) {
         if (nodo.getPadre() != null) {
-            NodoAvl hijoizquierdo = nodo.getPadre().getIzquierda();
-            NodoAvl hijoderecho = nodo.getPadre().getDerecha();
+            NodoAvl hijoizquierdo = nodo.getIzquierda();
+            NodoAvl hijoderecho = nodo.getDerecha();
             NodoAvl actual;
             if (nodo.getIzquierda() != null) {
                 actual = nodo.getIzquierda();
@@ -269,16 +274,16 @@ public class AVL {
                 actual = nodo.getDerecha();
             }
 
-            if (hijoizquierdo == nodo) {
+            if (nodo.getPadre().getIzquierda() == nodo) {
                 nodo.getPadre().setIzquierda(actual);
                 actual.setPadre(nodo.getPadre());
-                colocarAlturas(root);
+                colocarAlturas(raiz);
                 return actual.getPadre();
             }
-            if (hijoderecho == nodo) {
+            if (nodo.getPadre().getDerecha() == nodo) {
                 nodo.getPadre().setDerecha(actual);
                 actual.setPadre(nodo.getPadre());
-                colocarAlturas(root);
+                colocarAlturas(raiz);
                 return actual.getPadre();
             }
         } else {
@@ -287,29 +292,35 @@ public class AVL {
             NodoAvl iz = nodo.getIzquierda();
 
             if (der != null) {
-                root = der;
+                raiz = der;
                 der.setPadre(null);
                 return der;
             } else if (iz != null) {
-                root = iz;
+                raiz = iz;
                 iz.setPadre(null);
                 return iz;
             }
-            colocarAlturas(root);
+            colocarAlturas(raiz);
         }
-        colocarAlturas(root);
+        colocarAlturas(raiz);
         return null;
     }
 
     private NodoAvl caso3(NodoAvl nodo) {
         NodoAvl ultimoizquierda = recorrerIzquierda(nodo.getDerecha());
 
-        if (ultimoizquierda == nodo.getDerecha()) {
+        if (nodo.getPadre() == null) {
+        } else if (ultimoizquierda == nodo.getDerecha()) {
             ultimoizquierda = null;
         }
+
         if (ultimoizquierda != null) {
             if (nodo.getPadre() == null) {
-                root = ultimoizquierda;
+                ultimoizquierda.getPadre().setIzquierda(null);
+                ultimoizquierda.setDerecha(raiz.getDerecha());
+                ultimoizquierda.setIzquierda(raiz.getIzquierda());
+                ultimoizquierda.setPadre(null);
+                raiz = ultimoizquierda;
                 return ultimoizquierda;
             } else {
                 if (nodo.getPadre().getDerecha() == nodo) {
@@ -326,15 +337,15 @@ public class AVL {
             nodo.getIzquierda().setPadre(ultimoizquierda);
             nodo.getDerecha().setPadre(ultimoizquierda);
 
-            colocarAlturas(root);
+            colocarAlturas(raiz);
             return nodo.getPadre();
         } else {
             NodoAvl nodoDerecho = nodo.getDerecha();
 
             if (nodo.getPadre() == null) {
-                root = nodoDerecho;
+                raiz = nodoDerecho;
             } else {
-                if (nodo.getPadre() == nodo) {
+                if (nodo.getPadre().getDerecha() == nodo) {
                     nodo.getPadre().setDerecha(nodoDerecho);
                 } else if (nodo.getPadre().getIzquierda() == nodo) {
                     nodo.getPadre().setIzquierda(nodoDerecho);
@@ -342,7 +353,7 @@ public class AVL {
             }
             nodoDerecho.setPadre(nodo.getPadre());
             nodoDerecho.setIzquierda(nodo.getIzquierda());
-            colocarAlturas(root);
+            colocarAlturas(raiz);
             return nodoDerecho;
         }
     }
@@ -355,7 +366,7 @@ public class AVL {
     }
 
     public NodoAvl buscarC(String valor) {
-        NodoAvl busqueda = busc(valor, root);
+        NodoAvl busqueda = busc(valor, raiz);
         return busqueda;
     }
 
@@ -372,34 +383,18 @@ public class AVL {
         return null;
     }
 
-    private NodoAvl buscar(String valor, NodoAvl nodo, NodoAvl padre) {
-        NodoAvl retorno = null;
-        if (nodo != null) {
-            if (padre != null) {
-                if (valor.compareTo(nodo.getValor()) > 0) {
-                    buscar(valor, nodo.getDerecha(), nodo);
-                } else if (valor.compareTo(nodo.getValor()) < 0) {
-                    buscar(valor, nodo.getIzquierda(), nodo);
-                } else {
-                    retorno = nodo;
-                    return retorno;
-                }
-            } else {
-                if (valor == nodo.getValor()) {
+    private void busqueda(NodoAvl nodo, String valor) {
+        if (!match) {
+            if (nodo != null) {
+                if (nodo.getValor().equals(valor)) {
+                    resultadobusqueda = nodo;
                     match = true;
-                    retorno = nodo;
-                } else {
-                    if (match != true) {
-                        if (valor.compareTo(nodo.getValor()) > 0) {
-                            buscar(valor, nodo.getDerecha(), nodo);
-                        } else {
-                            buscar(valor, nodo.getIzquierda(), nodo);
-                        }
-                    }
+                    return;
                 }
+                busqueda(nodo.getIzquierda(), valor);
+                busqueda(nodo.getDerecha(), valor);
             }
         }
-        return retorno;
     }
 
     private void colocarAlturas(NodoAvl nodo) {
@@ -416,7 +411,7 @@ public class AVL {
                 NodoAvl z = mayorHijo(y);
 
                 nodo = reestructuracion(x, y, z);
-                colocarAlturas(root);
+                colocarAlturas(raiz);
             }
             if (nodo != null) {
                 nodo = nodo.getPadre();
@@ -460,48 +455,48 @@ public class AVL {
         if (x != null && y != null && z != null) {
             if (x.getFE() < -1) {
                 if (y.getFE() == 1) {
-                    if (root != x) {
+                    if (raiz != x) {
                         return rotacionDobleIzquierda(x);
                     } else {
-                        root = rotacionDobleIzquierda(x);
-                        return root;
+                        raiz = rotacionDobleIzquierda(x);
+                        return raiz;
                     }
                 } else if (y.getFE() == -1) {
-                    if (root != x) {
+                    if (raiz != x) {
                         return rotacionIzquierda(x);
                     } else {
-                        root = rotacionIzquierda(x);
-                        return root;
+                        raiz = rotacionIzquierda(x);
+                        return raiz;
                     }
                 } else if (y.getFE() == 0) {
-                    if (root != x) {
+                    if (raiz != x) {
                         return rotacionIzquierda(x);
                     } else {
-                        root = rotacionIzquierda(x);
-                        return root;
+                        raiz = rotacionIzquierda(x);
+                        return raiz;
                     }
                 }
             } else if (x.getFE() > 1) {
                 if (y.getFE() == -1) {
-                    if (root != x) {
+                    if (raiz != x) {
                         return rotacionDobleDerecha(x);
                     } else {
-                        root = rotacionDobleDerecha(x);
-                        return root;
+                        raiz = rotacionDobleDerecha(x);
+                        return raiz;
                     }
                 } else if (y.getFE() == 1) {
-                    if (root != x) {
+                    if (raiz != x) {
                         return rotacionDerecha(x);
                     } else {
-                        root = rotacionDerecha(x);
-                        return root;
+                        raiz = rotacionDerecha(x);
+                        return raiz;
                     }
                 } else if (y.getFE() == 0) {
-                    if (root != x) {
+                    if (raiz != x) {
                         return rotacionDerecha(x);
                     } else {
-                        root = rotacionDerecha(x);
-                        return root;
+                        raiz = rotacionDerecha(x);
+                        return raiz;
                     }
                 }
             }
@@ -514,7 +509,7 @@ public class AVL {
     }
 
     public void printGraphviz() throws IOException {
-        NodoAvl auxNode = this.root;
+        NodoAvl auxNode = this.raiz;
         PrintWriter sw = new PrintWriter(new FileWriter("AVL.txt"));
         sw.print("digraph G {");
         sw.println("rankdir = UD; \n");
@@ -551,7 +546,7 @@ public class AVL {
     }
 
     public void printGraphvizPost() throws IOException {
-        NodoAvl auxNode = this.root;
+        NodoAvl auxNode = this.raiz;
         PrintWriter sw = new PrintWriter(new FileWriter("Post.txt"));
         sw.print("digraph G {");
         sw.println("rankdir = LR; \n");
@@ -574,7 +569,7 @@ public class AVL {
     }
 
     public void printGraphvizPre() throws IOException {
-        NodoAvl auxNode = this.root;
+        NodoAvl auxNode = this.raiz;
         PrintWriter sw = new PrintWriter(new FileWriter("PRE.txt"));
         sw.print("digraph G {");
         sw.println("rankdir = LR; \n");
@@ -597,7 +592,7 @@ public class AVL {
     }
 
     public void printGraphvizIn() throws IOException {
-        NodoAvl auxNode = this.root;
+        NodoAvl auxNode = this.raiz;
         PrintWriter sw = new PrintWriter(new FileWriter("In.txt"));
         sw.print("digraph G {");
         sw.println("rankdir = LR; \n");
@@ -625,10 +620,10 @@ public class AVL {
             imppost(nodo.getIzquierda(), sw);
         }
         if (nodo.getDerecha() != null) {
-            sw.println("->" );
+            sw.println("->");
             au = nodo.getDerecha();
             impin(nodo.getDerecha(), sw);
-            sw.println( "->" );
+            sw.println("->");
         }
         sw.println(nodo.getValor());
         au = nodo;
@@ -637,13 +632,13 @@ public class AVL {
     private void impin(NodoAvl nodo, PrintWriter sw) {
         if (nodo.getIzquierda() != null) {
             impin(nodo.getIzquierda(), sw);
-            sw.println( "->" );
+            sw.println("->");
             au = nodo.getIzquierda();
         }
-        sw.println(nodo.getValor() );
+        sw.println(nodo.getValor());
         au = nodo;
         if (nodo.getDerecha() != null) {
-            sw.println( "->" );
+            sw.println("->");
             au = nodo.getDerecha();
             impin(nodo.getDerecha(), sw);
         }
@@ -651,7 +646,7 @@ public class AVL {
     }
 
     private void imppre(NodoAvl nodo, PrintWriter sw) {
-        sw.print(nodo.getValor() );
+        sw.print(nodo.getValor());
         au = nodo;
         if (nodo.getIzquierda() != null) {
             sw.print("->");
@@ -659,7 +654,7 @@ public class AVL {
             imppre(nodo.getIzquierda(), sw);
         }
         if (nodo.getDerecha() != null) {
-            sw.print( "->" );
+            sw.print("->");
             imppre(nodo.getDerecha(), sw);
             au = nodo.getDerecha();
         }

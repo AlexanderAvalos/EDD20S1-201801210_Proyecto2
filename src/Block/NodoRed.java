@@ -16,7 +16,7 @@ import java.util.logging.Logger;
  *
  * @author Alex
  */
-public class NodoRed  {
+public class NodoRed extends Thread{
 
     private InetAddress direccion;
     private DatagramSocket socket;

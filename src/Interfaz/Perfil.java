@@ -225,20 +225,21 @@ public class Perfil extends javax.swing.JFrame {
         jTextField3.setText(String.valueOf(edit.getCarnet()));
         jTextField4.setText(edit.getCarrera());
         jTextField5.setText(edit.getPass());
-
     }//GEN-LAST:event_formWindowOpened
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-        int id = Estructuras.getTablahash().posicionTabla(carne);
-        System.out.println(id);
-        Estructuras.getTablahash().eliminar(id, carne);
+
+        Estructuras.getTablahash().eliminar(carne);
         JOptionPane.showMessageDialog(null, "Eliminado");
+        Login main = new Login();
+        main.show(true);
+        this.hide();
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
-       Menu main = new Menu();
-       main.show(true);
-       this.hide();
+        Menu main = new Menu();
+        main.show(true);
+        this.hide();
     }//GEN-LAST:event_jButton4ActionPerformed
 
     /**

@@ -12,9 +12,11 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JComboBox;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileFilter;
@@ -268,7 +270,7 @@ public class Biblioteca extends javax.swing.JFrame {
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jTabbedPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 438, Short.MAX_VALUE)
+            .addComponent(jTabbedPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 438, Short.MAX_VALUE)
         );
 
         jTabbedPane1.addTab("Catalogo", jPanel1);
@@ -526,7 +528,7 @@ public class Biblioteca extends javax.swing.JFrame {
 
         jTextField2.setText("ISBN");
 
-        jButton14.setText("Buscar");
+        jButton14.setText("volver");
         jButton14.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton14ActionPerformed(evt);
@@ -634,7 +636,7 @@ public class Biblioteca extends javax.swing.JFrame {
 
     private void leerLibro(File archivo) throws FileNotFoundException, IOException, ParseException {
         JSONObject libro = new JSONObject();
-        libro = (JSONObject) parser.parse(new FileReader(archivo.getPath()));
+        libro = (JSONObject) parser.parse(new InputStreamReader(new FileInputStream(archivo.getPath()),"UTF-8"));
         JSONArray books = (JSONArray) libro.get("libros");
         for (Object obj : books) {
             if (obj != null) {
@@ -664,13 +666,10 @@ public class Biblioteca extends javax.swing.JFrame {
 
     private void jButton11ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton11ActionPerformed
         String Titulo = jTextField21.getText();
-        String titulos = Estructuras.getArbolAVL().buscar(Titulo);
-        jTextArea1.append(titulos);
+        jTextArea1.append(Estructuras.getArbolAVL().buscar(Titulo).getText());
     }//GEN-LAST:event_jButton11ActionPerformed
 
     private void jButton9ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton9ActionPerformed
-        String aux = "";
-        String texto = "";
         JFileChooser file = new JFileChooser("../Documents/");
         file.setFileSelectionMode(JFileChooser.FILES_ONLY);
         FileFilter filtro = new FileNameExtensionFilter("Archivos Json (*.json)", "json");
@@ -731,30 +730,33 @@ public class Biblioteca extends javax.swing.JFrame {
     private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
 
         int ISBN = Integer.parseInt(jTextField2.getText());
-
-        String autor = Estructuras.getArbolAVL().serch(ISBN).getArbol().exi(ISBN).getAutor();
-        String titulo = Estructuras.getArbolAVL().serch(ISBN).getArbol().exi(ISBN).getTitulo();
-        String isbn = String.valueOf(Estructuras.getArbolAVL().serch(ISBN).getArbol().exi(ISBN).getIsbn());
-        String idioma = Estructuras.getArbolAVL().serch(ISBN).getArbol().exi(ISBN).getIdioma();
-        String editor = Estructuras.getArbolAVL().serch(ISBN).getArbol().exi(ISBN).getEditorial();
-        String edicion = Estructuras.getArbolAVL().serch(ISBN).getArbol().exi(ISBN).getEdicion();
-        String categoria = Estructuras.getArbolAVL().serch(ISBN).getArbol().exi(ISBN).getCategoria();
-        String año = String.valueOf(Estructuras.getArbolAVL().serch(ISBN).getArbol().exi(ISBN).getAño());
-        jTextArea4.append(" ISBN: " + isbn + '\n');
-        jTextArea4.append(" Autor: " + autor + '\n');
-        jTextArea4.append(" Titulo: " + titulo + '\n');
-        jTextArea4.append(" Edicion: " + edicion + '\n');
-        jTextArea4.append(" Editoria: " + editor + '\n');
-        jTextArea4.append(" Idioma: " + idioma + '\n');
-        jTextArea4.append(" Categoria: " + categoria + '\n');
-        jTextArea4.append(" Año: " + año + '\n');
-        jTextArea4.append("\n");
-
+        if (Estructuras.getArbolAVL().serch(ISBN) != null) {
+            String autor = Estructuras.getArbolAVL().serch(ISBN).getArbol().exi(ISBN).getAutor();
+            String titulo = Estructuras.getArbolAVL().serch(ISBN).getArbol().exi(ISBN).getTitulo();
+            String isbn = String.valueOf(Estructuras.getArbolAVL().serch(ISBN).getArbol().exi(ISBN).getIsbn());
+            String idioma = Estructuras.getArbolAVL().serch(ISBN).getArbol().exi(ISBN).getIdioma();
+            String editor = Estructuras.getArbolAVL().serch(ISBN).getArbol().exi(ISBN).getEditorial();
+            String edicion = Estructuras.getArbolAVL().serch(ISBN).getArbol().exi(ISBN).getEdicion();
+            String categoria = Estructuras.getArbolAVL().serch(ISBN).getArbol().exi(ISBN).getCategoria();
+            String año = String.valueOf(Estructuras.getArbolAVL().serch(ISBN).getArbol().exi(ISBN).getAño());
+            jTextArea4.append(" ISBN: " + isbn + '\n');
+            jTextArea4.append(" Autor: " + autor + '\n');
+            jTextArea4.append(" Titulo: " + titulo + '\n');
+            jTextArea4.append(" Edicion: " + edicion + '\n');
+            jTextArea4.append(" Editoria: " + editor + '\n');
+            jTextArea4.append(" Idioma: " + idioma + '\n');
+            jTextArea4.append(" Categoria: " + categoria + '\n');
+            jTextArea4.append(" Año: " + año + '\n');
+            jTextArea4.append("\n");
+        }else{
+            jTextArea4.setText("");
+         JOptionPane.showMessageDialog(null, "No existe libro");
+        }
     }//GEN-LAST:event_jButton7ActionPerformed
 
     private void jButton10ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton10ActionPerformed
         int ISBN = Integer.parseInt(jTextField20.getText());
-        Estructuras.getArbolAVL().serch(ISBN).getArbol().Remover(ISBN);
+        Estructuras.getArbolAVL().serch(ISBN).getArbol().Eliminar(ISBN);
     }//GEN-LAST:event_jButton10ActionPerformed
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed

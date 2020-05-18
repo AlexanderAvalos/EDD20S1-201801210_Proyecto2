@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import javax.swing.JComboBox;
 import Interfaz.Biblioteca;
+import javax.swing.JTextArea;
 
 /**
  *
@@ -18,6 +19,7 @@ import Interfaz.Biblioteca;
 public class AVL {
 
     private JComboBox catalogo = new JComboBox();
+    private JTextArea titulo = new JTextArea();
     private NodoAvl raiz = null;
     private boolean derecha, izquierda;
     private boolean match = false;
@@ -76,7 +78,6 @@ public class AVL {
         }
         Libro aux = nodo.getArbol().exi(libro);
         if (aux != null) {
-            System.out.println(aux.getIsbn());
             if (aux.getIsbn() == libro) {
                 busqueda = nodo;
             }
@@ -85,19 +86,16 @@ public class AVL {
         recorrer(nodo.getDerecha(), libro);
     }
 
-    public String buscar(String texto) {
-        recorrer1(raiz, texto);
-        return titulos;
+    public JTextArea buscar(String texto) {
+        recorrer1(this.raiz, texto);
+        return titulo;
     }
 
     private void recorrer1(NodoAvl nodo, String texto) {
         if (nodo == null) {
             return;
         }
-        String aux = nodo.getArbol().exis(texto);
-        if (!aux.equals("null")) {
-            titulos = titulos + aux;
-        }
+        titulo.append(nodo.getArbol().exis(texto).getText());
         recorrer1(nodo.getIzquierda(), texto);
         recorrer1(nodo.getDerecha(), texto);
     }

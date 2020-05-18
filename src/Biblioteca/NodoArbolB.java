@@ -10,7 +10,6 @@ package Biblioteca;
  * @author Alex
  */
 public class NodoArbolB {
-    
     public static int m = 5;
     private static int numPunteros = m + 1;
     private static int numLlaves = m;

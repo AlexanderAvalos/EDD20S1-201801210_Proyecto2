@@ -5,7 +5,6 @@
  */
 package Usuarios;
 
-import Biblioteca.NodoAvl;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -25,17 +24,21 @@ public class TablaHash {
 
     public TablaHash() {
         this.TAMTABLA = 45;
-        this.Tabla = new NodoTabla[TAMTABLA]; // Reserva la cantidad de posiciones de memorias a utilizar
+        this.Tabla = new NodoTabla[TAMTABLA];
         for (int i = 0; i < TAMTABLA; i++) {
-            Tabla[i] = null; // inicializar todas las posiciones de la tabla en null
+            Tabla[i] = null;
         }
-        numElementos = 0; // numero de elemntos
+        numElementos = 0;
     }
 
     public int posicionTabla(int id) {
-        //Aqui se implementa la funcion de dispercion
         int i = 0, p;
         p = id % TAMTABLA;
+        if (p > TAMTABLA) {
+            while (p < TAMTABLA) {
+                p = TAMTABLA - p;
+            }
+        }
         return p;
     }
 
@@ -57,25 +60,22 @@ public class TablaHash {
 
     public boolean existe(int id) {
 
-        NodoTabla actual = Tabla[id]; // obtiene la posicion de memoria si el identificador ya fue insertado
-        if (actual != null) // si actual no es vacio
-        {
-            if (actual.eliminado) // verifica si ya fue insertado y eliminado
-            {
-                return false; // si fue eliminado, retornar falso, esto es por si se quiere insertar nuevamente el identificador a la tabla
+        NodoTabla actual = Tabla[id];
+        if (actual != null) {
+            if (actual.eliminado) {
+                return false;
             } else {
-                return true; // si no fue eliminado, entonces existe
+                return true;
             }
         } else {
-            return false; // si la posicion de la tabla es nulo, entonces no existe elemento
+            return false;
         }
     }
 
     public void insertar(int id, Usuario valor) {
-        if (!existe(id)) // verifica si el elemento ya fue insertado
-        {
-            NodoTabla nuevo = new NodoTabla(id, valor); // crea un nuevo nodo
-            int posicion = posicionTabla(id); // busca en que posicion ponerlo
+        if (!existe(id)) {
+            NodoTabla nuevo = new NodoTabla(id, valor);
+            int posicion = posicionTabla(id);
             Tabla[posicion] = nuevo;
             Tabla[posicion].eliminado = false;
             numElementos++;
@@ -90,10 +90,10 @@ public class TablaHash {
     }
 
     private ListaDoble getUser(int id) {
-
         for (int i = 0; i < TAMTABLA; i++) {
             if (Tabla[i] != null) {
-                if (Tabla[i].id == id) {
+                if (Tabla[i].lst.buscar(id).getCarnet() == id) {
+                    Tabla[i].lst.imprimir();
                     return Tabla[i].lst;
                 }
             }
@@ -102,26 +102,9 @@ public class TablaHash {
     }
 
     private void borrar(int id) {
-        if (existe(id)) //busca si existe entonces borrar
-        {
+        if (existe(id)) {
             Tabla[id] = null;
         }
-    }
-
-    public String imprimir() {
-        String result = null;
-
-        for (int i = 0; i < TAMTABLA; i++) {
-            if (Tabla[i] != null) {
-                System.out.println(Tabla[i].id + " " + Tabla[i].lst.imprimir());
-                result += "-------------" + Tabla[i].id + "-------------";
-                result += Tabla[i].lst.imprimir();
-
-            } else {
-                result += "-------------NULL-------------\n";
-            }
-        }
-        return result;
     }
 
     public NodoTabla Buscar(int id) {
@@ -146,7 +129,6 @@ public class TablaHash {
         int cont = 0, cont2 = 0;
         PrintWriter sw = new PrintWriter(new FileWriter("Tabla.txt"));
         sw.println("digraph G{ bgcolor = white \n node[fontcolor = \"black \", height = 0.5, color = \"gray \"] \n [shape=box, style=filled, color=gray] \n rankdir=UD \n edge  [color=\"black\", dir=fordware]");
-        // sw.print(Tabla[i].id % TAMTABLA + "[style =\"filled\"; label=\"" +Tabla[i].id % TAMTABLA  + "\"; pos= \""+ cont +",0! \"]\n");
         for (int i = 0; i < TAMTABLA; i++) {
             sw.print(i + "[style =\"filled\"; label=\"" + i + "\";pos= \"1,-" + cont + "! \"]\n");
             cont++;
@@ -206,27 +188,21 @@ public class TablaHash {
         ExecuteCommand(cmd[0] + " " + cmd[1] + " " + cmd[2] + " " + cmd[3] + " " + cmd[4]);
     }
 
-    public void eliminar(int id, int carnet) {
+    public void eliminar(int carnet) {
+        int id = posicionTabla(carnet);
         if (existe(id) == true) {
-            ListaDoble lst = getUser(id);
+            ListaDoble lst = getUser(carnet);
+            System.out.println(lst.primero.getDato().getCarnet());
             if (lst.existe(carnet) == true) {
                 lst.borrar(carnet);
             } else {
                 return;
-            }
-
-            if (lst.primero == null) {
-                borrar(id);
             }
         }
 
     }
 
     static void ExecuteCommand(String _Command) throws IOException {
-        //Indicamos que deseamos inicializar el proceso cmd.exe junto a un comando de arranque. 
-        //(/C, le indicamos al proceso cmd que deseamos que cuando termine la tarea asignada se cierre el proceso).
-        //Para mas informacion consulte la ayuda de la consola con cmd.exe /? 
         Runtime.getRuntime().exec(_Command);
-// Indicamos que la salida del proceso se redireccione en un Stream
     }
 }

@@ -47,24 +47,23 @@ public class ListaDoble {
         }
     }
 
-    public boolean agregar(Usuario user) {
+    public void agregar(Usuario user) {
         NodoLista nuevo = new NodoLista(user);
         if (primero == null) {
             primero = nuevo;
             ultimo = nuevo;
             size++;
-            return true;
+            return;
         } else {
             if (existe(user.getCarnet()) == false) {
                 ultimo.siguiente = nuevo;
                 nuevo.anterior = ultimo;
                 ultimo = nuevo;
                 size++;
-                return true;
+                return;
             } else {
-                //No se inserto por que ya esta repetido;
                 System.out.println("ya existe");
-                return false;
+                return;
             }
         }
     }
@@ -82,15 +81,14 @@ public class ListaDoble {
         return result;
     }
 
-    public boolean borrar(int carnet) {
+    public void borrar(int carnet) {
         NodoLista temporal = primero;
         while (temporal != null) {
             if (temporal.getDato().getCarnet() == carnet) {
                 if (temporal == primero) {
                     primero = temporal.siguiente;
-                    temporal = null;
                     size--;
-                    return true;
+                    return;
                 } else {
                     if (temporal.siguiente == null) {
                         temporal.anterior.siguiente = null;
@@ -100,23 +98,20 @@ public class ListaDoble {
                         temporal = null;
                     }
                     size--;
-                    return true;
+                    return;
                 }
             } else {
                 temporal = temporal.siguiente;
             }
         }
-        return false;
     }
 
-    boolean existe(int carnet) {
+    boolean existe(int carnet
+    ) {
         NodoLista temporal = primero;
-
         while (temporal != null) {
             if (temporal.getDato().getCarnet() == carnet) {
                 return true;
-            } else {
-
             }
         }
         return false;

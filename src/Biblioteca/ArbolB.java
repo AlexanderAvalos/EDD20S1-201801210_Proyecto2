@@ -9,16 +9,18 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import javax.swing.JTextArea;
 
 /**
  *
  * @author Alex
  */
 public class ArbolB {
-
+    private JTextArea area = new JTextArea();
+    private ArbolB nodoauxiliar = null;
     ArrayList<Libro> lstnodos = new ArrayList<>();
     ArrayList<Libro> lst = new ArrayList<>();
-    public NodoArbolB raiz;
+    public NodoArbolB raiz, aux;
     private static ArbolB instancia = null;
     private String valor;
 
@@ -72,35 +74,36 @@ public class ArbolB {
     public Libro exi(int libro) {
         Libro aux = recorrer(libro);
         if (aux == null) {
+            System.out.println("no existe");
             return null;
         } else {
             return aux;
         }
     }
 
-    public String exis(String texto) {
-    String temp = recorrerA(raiz, texto);
-    return temp;
+    public JTextArea exis(String texto) {
+        recorrerA(this.raiz, texto);
+        valor = "";
+        return area;
     }
 
-    private String recorrerA(NodoArbolB nodo, String texto) {
+    private void recorrerA(NodoArbolB nodo, String texto) {
         if (nodo != null) {
-            for (int i = 0; i < nodo.llaves.length; i++) {
+            for (int i = 0; i < 4; i++) {
                 if (nodo.llaves[i] != null) {
-                    if (nodo.llaves[i].getTitulo().contains(texto)) {
-                        
-                        valor += " "+nodo.llaves[i].getTitulo() +"  "+ nodo.llaves[i].getIsbn()+ '\n';
-                        return valor;
+                    if (nodo.llaves[i].getTitulo().contains(texto) || nodo.llaves[i].getTitulo().equals(texto)) {
+                        valor += " " + nodo.llaves[i].getTitulo() + "  " + nodo.llaves[i].getIsbn() + '\n';
+                        System.out.println();
+                        area.append(String.valueOf(nodo.llaves[i].getIsbn())+" "+ nodo.llaves[i].getTitulo()+'\n');
                     }
                 }
             }
-        }
-        for (int i = 0; i < 5; i++) {
-            if (nodo.punteros[i] != null) {
-                ordenar(nodo.punteros[i]);
+            for (int i = 0; i < 5; i++) {
+                if (nodo.punteros[i] != null) {
+                    ordenar(nodo.punteros[i]);
+                }
             }
         }
-        return valor += " ";
     }
 
     private Libro recorrer(int libro) {
@@ -108,9 +111,7 @@ public class ArbolB {
         if (aux != null) {
             for (int i = 0; i < aux.llaves.length; i++) {
                 if (aux.llaves[i] != null) {
-                    System.out.println(aux.llaves[i].getIsbn());
                     if (aux.llaves[i].getIsbn() == libro) {
-                        System.out.println(aux.llaves[i].getIsbn());
                         return aux.llaves[i];
                     }
                 }
@@ -227,7 +228,7 @@ public class ArbolB {
             }
 
             int order = 6;
-            //Máximo de claves permitidas en un Árbol B = m-1
+
             if (nodo.ULlave < order - 1) {
                 return;
             } else {
@@ -265,7 +266,6 @@ public class ArbolB {
 
                     node1.punteros[posInNode1] = null;
 
-                    //----------------------------------------------
                     posInNode1++;
                     posInNode2++;
 
@@ -303,6 +303,32 @@ public class ArbolB {
         }
     }
 
+    public void Eliminar(int isbn) {
+        nodoauxiliar = new ArbolB();
+        eliminar(this.raiz, isbn);
+        this.raiz = nodoauxiliar.raiz;
+        nodoauxiliar = null;
+    }
+
+    private void eliminar(NodoArbolB nodo, int valor) {
+        if (nodo != null) {
+            for (int i = 0; i < 4; i++) {
+                if (nodo.llaves[i] != null) {
+                    if (nodo.llaves[i].getIsbn() != valor) {
+                        Libro nuevo = new Libro(nodo.llaves[i].getIsbn(), nodo.llaves[i].getTitulo(), nodo.llaves[i].getAutor(), nodo.llaves[i].getEditorial(), nodo.llaves[i].getAño(),
+                                nodo.llaves[i].getEdicion(), nodo.llaves[i].getCategoria(), nodo.llaves[i].getIdioma(), nodo.llaves[i].getCarnet());
+                        nodoauxiliar.insert(nuevo);
+                    }
+                }
+            }
+            for (int i = 0; i < 5; i++) {
+                if (nodo.punteros[i] != null) {
+                    eliminar(nodo.punteros[i], valor);
+                }
+            }
+        }
+    }
+
     public void printGraphviz() throws IOException {
         NodoArbolB auxNode = this.raiz;
 
@@ -334,15 +360,15 @@ public class ArbolB {
     private void print(NodoArbolB nodo, PrintWriter sw) {
         if (nodo != null) {
             if (nodo.Padre != null) {
-                sw.println("\"" +"ISBN: "+ nodo.Padre.llaves[0].getIsbn() +" Titulo: "+ nodo.Padre.llaves[0].getTitulo()+ "\" -> \"" +"ISBN: "+ nodo.llaves[0].getIsbn() +" Titulo: "+ nodo.llaves[0].getTitulo()+ "\"");
+                sw.println("\"" + "ISBN: " + nodo.Padre.llaves[0].getIsbn() + " Titulo: " + nodo.Padre.llaves[0].getTitulo() + "\" -> \"" + "ISBN: " + nodo.llaves[0].getIsbn() + " Titulo: " + nodo.llaves[0].getTitulo() + "\"");
             }
-            sw.println("\n\"" + "ISBN: "+ nodo.llaves[0].getIsbn() +" Titulo: "+nodo.llaves[0].getTitulo()+ "\"[label=\"|");
+            sw.println("\n\"" + "ISBN: " + nodo.llaves[0].getIsbn() + " Titulo: " + nodo.llaves[0].getTitulo() + "\"[label=\"|");
             for (int i = 0; i < 4; i++) {
                 if (i != 0) {
                     sw.println("|");
                 }
                 if (nodo.llaves[i] != null) {
-                    sw.println(" ISBN: "+ nodo.llaves[0].getIsbn() +" Titulo: "+nodo.llaves[0].getTitulo());
+                    sw.println(" ISBN: " + nodo.llaves[i].getIsbn() + " Titulo: " + nodo.llaves[i].getTitulo());
                 } else {
                     sw.println(0);
                 }
@@ -357,16 +383,12 @@ public class ArbolB {
         }
     }
 
-    //METODO PARA ABRIR CONSOLA Y EJECUTAR COMANDOS PARA GRAPVIZ
     static void ExecuteCommand(String _Command) throws IOException {
-        //Indicamos que deseamos inicializar el proceso cmd.exe junto a un comando de arranque. 
-        //(/C, le indicamos al proceso cmd que deseamos que cuando termine la tarea asignada se cierre el proceso).
-        //Para mas informacion consulte la ayuda de la consola con cmd.exe /? 
+
         Runtime.getRuntime().exec(_Command);
-// Indicamos que la salida del proceso se redireccione en un Stream
+
     }
 
-    //OBETNER VALOR DE ATRIBUTO KEY REMPLZAR CON ATRIBUTO N (MODIFICAR)
     public void set(Libro valor, Libro Reemplazo) {
         if (this.existe(valor)) {
             NodoArbolB nodo = this.buscar(valor, this.raiz);
@@ -392,7 +414,6 @@ public class ArbolB {
         }
     }
 
-    //ALGORITMO PARA REEMPLAZAR 
     public void ReemplazarLlave(NodoArbolB nodo, Libro valor, Libro valor2) {
         int i = 1;
         while (i <= nodo.ULlave) {
@@ -404,7 +425,6 @@ public class ArbolB {
         }
     }
 
-    //ALGORITMO QUE ELMININA KEYS EN NODOS HOJA
     public void EliminarHoja(NodoArbolB nodo, Libro valor) {
         int i = 0;
         while (i < nodo.ULlave) {
@@ -423,7 +443,6 @@ public class ArbolB {
         }
     }
 
-    //VERIFICA EL MINIMO
     private Boolean VerificarMinimo(NodoArbolB nodo) {
         if (nodo == this.raiz) {
             if (nodo.ULlave == 0) {
@@ -439,7 +458,6 @@ public class ArbolB {
         }
     }
 
-    //LADO IZQUIRDO DEL ARBOL UTILIZADO PARA COMPARACION ENTRE NODOS 
     private NodoArbolB izquierda(NodoArbolB nodo) {
         int i = 0;
         NodoArbolB Padre = nodo.Padre;
@@ -456,7 +474,6 @@ public class ArbolB {
         return null;
     }
 
-    //LADO DERECHO DEL ARBOL UTILIZADO PARA COMPARACION COMPARACION ENTRE NODOS
     private NodoArbolB derecha(NodoArbolB nodo) {
         int i = 0;
         NodoArbolB Padre = nodo.Padre;
@@ -531,9 +548,6 @@ public class ArbolB {
         }
     }
 
-    //METODO QUE CREA UNA NUEVA RAIZ
-    //EN LA ELIMINACION EXISTE LA POSIBILIDAD QUE SE ELIMINE UNA RAIZ 
-    //METODO PERMITE CREAR UNA NUEVA RAIZ PARA QUE EL ARBOL NO SE ALTERE
     private void NuevaRaiz(NodoArbolB left, NodoArbolB right) {
         left.llaves[left.ULlave] = raiz.llaves[0];
 
@@ -559,8 +573,6 @@ public class ArbolB {
         raiz.Padre = null;
     }
 
-    //METODO COMBINAR , PERMITE COMBINAR LOS DATOS EN EL MOMENTO DE LA ELIMINACION
-    //INDISPENSABLE PARA LA REDUCCION DE PAGINAS O EL INCREMENTO DE DATOS EN LAS PAGINAS
     private void combinar(NodoArbolB nodo) {
         if (derecha(nodo) != null) {
             NodoArbolB Padre = nodo.Padre;
@@ -594,7 +606,6 @@ public class ArbolB {
         }
     }
 
-    //METODO ELIMINAR , ELIMINA ID EN EL ARBOL SEGUN PARAMETRO ENVIADO
     public void Remover(int valor) {
 
         for (int i = 0; i < lstnodos.size(); i++) {
@@ -602,7 +613,7 @@ public class ArbolB {
             NodoArbolB nodo = buscar(lstnodos.get(i), this.raiz);
 
             if (nodo != null) {
-                //ELIMINACION SI Y SOLO SI EL NODO NO ES HOJA 
+
                 if (nodo.hoja == false) {
                     NodoArbolB hoja = PrecedenciaNodo(lstnodos.get(i), nodo);
                     Libro presedencia = hoja.llaves[0];
@@ -610,13 +621,10 @@ public class ArbolB {
                     nodo = hoja;
                     EliminarHoja(hoja, presedencia);
                 } else {
-                    //ELIMINACION NODO EN HOJA 
+
                     EliminarHoja(nodo, lstnodos.get(i));
                 }
 
-                //ALGORITMO QUE SE MANTIENE EJECUTANDO DURANTE LA ELIMINACION 
-                //INSTRUCCIONES QUE CREAN NUEVAS RAICES, COMBINAN , MUEVEN IZQ DER EN CASO QUE SE ELIMINO
-                //NODOS EN LOS CUALES SE REQUIERE RESTRUCTURAR EL ARBOL ARMANDO NUEVAS PAGINAS
                 while (true) {
                     if (VerificarMinimo(nodo)) {
                         break;
@@ -647,25 +655,4 @@ public class ArbolB {
         }
     }
 
-    public void getValor(NodoArbolB nodo) {
-
-        if (nodo != null) {
-            if (nodo.Padre != null) {
-                //lst.add(nodo.llaves[0]);
-            }
-            for (int i = 0; i < 4; i++) {
-                if (nodo.llaves[i] != null) {
-                    lst.add(nodo.llaves[i]);
-                }
-
-            }
-
-            for (int i = 0; i < 5; i++) {
-                if (nodo.punteros[i] != null) {
-                    getValor(nodo.punteros[i]);
-                }
-            }
-        }
-
-    }
 }

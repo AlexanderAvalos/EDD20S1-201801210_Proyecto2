@@ -11,9 +11,13 @@ import Usuarios.TablaHash;
 import Usuarios.Usuario;
 import java.awt.Color;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
@@ -232,11 +236,12 @@ public class Login extends javax.swing.JFrame {
 
         try {
             if (jPasswordField1 != null && textField2 != null) {
-                int carnet = Integer.valueOf(textField2.getText());
+                int car = Integer.valueOf(textField2.getText());
                 String pass = jPasswordField1.getText();
-                int id = Estructuras.getTablahash().posicionTabla(carnet);
-                Usuario user = Estructuras.getTablahash().Tabla[id].lst.buscar(carnet);
-                if (user.getCarnet() == carnet) {
+                int id = Estructuras.getTablahash().posicionTabla(car);
+                System.out.println(id);
+                Usuario user = Estructuras.getTablahash().Tabla[id].lst.buscar(car);
+                if (user.getCarnet() == car) {
                     if (user.getPass().equals(pass)) {
                         JOptionPane.showMessageDialog(null, "Bienvenido " + user.getNombre());
                         Login.carnet = user.getCarnet();
@@ -249,7 +254,6 @@ public class Login extends javax.swing.JFrame {
                 } else {
                     JOptionPane.showMessageDialog(null, "credeciales incorrectas");
                 }
-
             } else {
                 JOptionPane.showMessageDialog(null, "llene campos");
             }
@@ -319,7 +323,7 @@ public class Login extends javax.swing.JFrame {
     private void leerUsuario(File archivo) throws FileNotFoundException, IOException, ParseException {
 
         JSONObject libro = new JSONObject();
-        libro = (JSONObject) parser.parse(new FileReader(archivo.getPath()));
+        libro = (JSONObject) parser.parse(new InputStreamReader(new FileInputStream(archivo.getPath()),"UTF-8"));
         JSONArray books = (JSONArray) libro.get("Usuarios");
         for (Object obj : books) {
             if (obj != null) {

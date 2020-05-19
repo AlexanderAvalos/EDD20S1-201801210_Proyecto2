@@ -9,7 +9,7 @@ import Biblioteca.ArbolB;
 import Biblioteca.AVL;
 import Usuarios.TablaHash;
 import Block.ListaSimple;
-import Block.NodoRed;
+import Interfaz.NodoRed;
 import Usuarios.ListaDoble;
 
 /**

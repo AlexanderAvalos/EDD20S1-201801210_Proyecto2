@@ -18,6 +18,14 @@ public class ListaSimple {
     private Nodo primero;
     private Nodo ultimo;
 
+    public Nodo getPrimero() {
+        return primero;
+    }
+
+    public void setPrimero(Nodo primero) {
+        this.primero = primero;
+    }
+
     private boolean vacio() {
         if (primero == null) {
             return true;
@@ -27,14 +35,15 @@ public class ListaSimple {
 
     public void insertar(int valor) {
         Nodo nuevo = new Nodo();
+        nuevo.setValor(valor);
         if (vacio()) {
-            nuevo = new Nodo(valor);
             primero = nuevo;
             ultimo = primero;
+            primero.setSiguiente(null);
         } else {
-            nuevo = new Nodo(valor);
             ultimo.setSiguiente(nuevo);
             ultimo = nuevo;
+            ultimo.setSiguiente(null);
         }
     }
 
@@ -103,7 +112,7 @@ public class ListaSimple {
         Nodo aux = new Nodo();
         aux = primero;
         while (aux != null) {
-            sw.println(aux.getValor() + "[label = \"" + aux.getValor() + "\" ;");
+            sw.println(aux.getValor() + "[label = \"" + aux.getValor() + "\" ];");
             aux = aux.getSiguiente();
         }
         aux = primero;

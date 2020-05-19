@@ -1,0 +1,124 @@
+digraph G {
+	 rankdir = TB; 
+
+	 node[shape=record]; 
+
+	 subgraph clusterBTree { 
+
+	 node [shape=record];
+node [style=filled];
+node [fillcolor="#EEEEEE"];
+node [color="#8C8C8E"];
+edge [color="#31CEF0"]; 
+
+
+"ISBN: 10844 Titulo: El ocaso de un régimen"[label="|
+ ISBN: 10844 Titulo: El ocaso de un régimen
+|
+0
+|
+0
+|
+0
+"];
+
+"ISBN: 10844 Titulo: El ocaso de un régimen" -> "ISBN: 10774 Titulo: Optimización de rendimiento y aseguramiento de inocuidad en la industria de quesería; una guía para la pequeña y mediana empresa"
+
+"ISBN: 10774 Titulo: Optimización de rendimiento y aseguramiento de inocuidad en la industria de quesería; una guía para la pequeña y mediana empresa"[label="|
+ ISBN: 10774 Titulo: Optimización de rendimiento y aseguramiento de inocuidad en la industria de quesería; una guía para la pequeña y mediana empresa
+|
+ ISBN: 10786 Titulo: La idea del hombre
+|
+0
+|
+0
+"];
+
+"ISBN: 10774 Titulo: Optimización de rendimiento y aseguramiento de inocuidad en la industria de quesería; una guía para la pequeña y mediana empresa" -> "ISBN: 10772 Titulo: Las Ventas en el mundo actual"
+
+"ISBN: 10772 Titulo: Las Ventas en el mundo actual"[label="|
+ ISBN: 10772 Titulo: Las Ventas en el mundo actual
+|
+ ISBN: 10773 Titulo: Procesamiento de carnes y embutidos; elaboración, estandarización, control de calidad
+|
+0
+|
+0
+"];
+
+"ISBN: 10774 Titulo: Optimización de rendimiento y aseguramiento de inocuidad en la industria de quesería; una guía para la pequeña y mediana empresa" -> "ISBN: 10775 Titulo: Producción higiénica de la leche cruda; una guía para la pequeña y mediana empresa"
+
+"ISBN: 10775 Titulo: Producción higiénica de la leche cruda; una guía para la pequeña y mediana empresa"[label="|
+ ISBN: 10775 Titulo: Producción higiénica de la leche cruda; una guía para la pequeña y mediana empresa
+|
+ ISBN: 10783 Titulo: Moral para intelectuales
+|
+0
+|
+0
+"];
+
+"ISBN: 10774 Titulo: Optimización de rendimiento y aseguramiento de inocuidad en la industria de quesería; una guía para la pequeña y mediana empresa" -> "ISBN: 10840 Titulo: Constitución pastoral Gaudium et spes, sobre la Iglesia en el mundo actual"
+
+"ISBN: 10840 Titulo: Constitución pastoral Gaudium et spes, sobre la Iglesia en el mundo actual"[label="|
+ ISBN: 10840 Titulo: Constitución pastoral Gaudium et spes, sobre la Iglesia en el mundo actual
+|
+ ISBN: 10842 Titulo: Introducción a la ética
+|
+0
+|
+0
+"];
+
+"ISBN: 10844 Titulo: El ocaso de un régimen" -> "ISBN: 10848 Titulo: Historia de la provincia de San Vicente de Chiapa y Guatemala de la orden de Predicadores"
+
+"ISBN: 10848 Titulo: Historia de la provincia de San Vicente de Chiapa y Guatemala de la orden de Predicadores"[label="|
+ ISBN: 10848 Titulo: Historia de la provincia de San Vicente de Chiapa y Guatemala de la orden de Predicadores
+|
+ ISBN: 10930 Titulo: Psicología aplicada a la enseñanza
+|
+0
+|
+0
+"];
+
+"ISBN: 10848 Titulo: Historia de la provincia de San Vicente de Chiapa y Guatemala de la orden de Predicadores" -> "ISBN: 10846 Titulo: Educación política nacional"
+
+"ISBN: 10846 Titulo: Educación política nacional"[label="|
+ ISBN: 10846 Titulo: Educación política nacional
+|
+ ISBN: 10847 Titulo: De hombres sociales y movimientos políticos / C. Wright Mills.
+|
+0
+|
+0
+"];
+
+"ISBN: 10848 Titulo: Historia de la provincia de San Vicente de Chiapa y Guatemala de la orden de Predicadores" -> "ISBN: 10927 Titulo: Evaluación de impacto en formación empresarial ; el caso FUNDES"
+
+"ISBN: 10927 Titulo: Evaluación de impacto en formación empresarial ; el caso FUNDES"[label="|
+ ISBN: 10927 Titulo: Evaluación de impacto en formación empresarial ; el caso FUNDES
+|
+ ISBN: 10928 Titulo: Cómo resolver el problema de falta de tiempo
+|
+0
+|
+0
+"];
+
+"ISBN: 10848 Titulo: Historia de la provincia de San Vicente de Chiapa y Guatemala de la orden de Predicadores" -> "ISBN: 10932 Titulo: Pan Am: an airline and its aircraft"
+
+"ISBN: 10932 Titulo: Pan Am: an airline and its aircraft"[label="|
+ ISBN: 10932 Titulo: Pan Am: an airline and its aircraft
+|
+ ISBN: 10933 Titulo: La Mujer de pelo largo / Leonor Paz y Paz G.
+|
+ ISBN: 10934 Titulo: El libro de la piedad y de la muerte
+|
+0
+"];
+
+	 } 
+
+	 } 
+

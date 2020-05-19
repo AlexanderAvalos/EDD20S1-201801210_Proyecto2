@@ -208,28 +208,15 @@ public class Login extends javax.swing.JFrame {
         file.showOpenDialog(this);
         File archivo = file.getSelectedFile();
         if (archivo != null) {
-            if (archivo.getName().equals("usuarios.json")) {
-                try {
-                    leerUsuario(archivo);
-                } catch (IOException ex) {
-                    System.out.println("error");
-                } catch (ParseException ex) {
-                    System.out.println("error");
-                }
-            } else if (archivo.getName().equals("Libros.json")) {
-                try {
-                    leerLibro(archivo);
-                } catch (IOException ex) {
-                    System.out.println("error");
-                } catch (ParseException ex) {
-                    System.out.println("error");
-                }
-            } else {
-                JOptionPane.showMessageDialog(null, "Error de carga");
+
+            try {
+                leerUsuario(archivo);
+            } catch (IOException ex) {
+                JOptionPane.showMessageDialog(null, "lectura de usuarios incorrecta");
+            } catch (ParseException ex) {
+                JOptionPane.showMessageDialog(null, "lectura de usuarios incorrecta");
             }
         }
-
-
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
@@ -260,8 +247,6 @@ public class Login extends javax.swing.JFrame {
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, "Llene campos");
         }
-
-
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void jLabel1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel1MouseClicked
@@ -323,7 +308,7 @@ public class Login extends javax.swing.JFrame {
     private void leerUsuario(File archivo) throws FileNotFoundException, IOException, ParseException {
 
         JSONObject libro = new JSONObject();
-        libro = (JSONObject) parser.parse(new InputStreamReader(new FileInputStream(archivo.getPath()),"UTF-8"));
+        libro = (JSONObject) parser.parse(new InputStreamReader(new FileInputStream(archivo.getPath()), "UTF-8"));
         JSONArray books = (JSONArray) libro.get("Usuarios");
         for (Object obj : books) {
             if (obj != null) {
@@ -335,9 +320,9 @@ public class Login extends javax.swing.JFrame {
                 String carrera = (String) item.get("Carrera");
                 String pass = (String) item.get("Password");
                 int id = Estructuras.getTablahash().posicionTabla(carnet);
+                System.out.println(id);
                 Usuarios.Usuario nuevo = new Usuario(carnet, nombre, apellido, carrera, pass);
                 Estructuras.getTablahash().insertar(id, nuevo);
-                System.out.println(carnet + " " + pass);
             }
         }
     }

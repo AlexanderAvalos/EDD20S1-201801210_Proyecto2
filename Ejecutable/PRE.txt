@@ -1,0 +1,4 @@
+digraph G {rankdir = LR; 
+
+Informativos->Consulta->Biografia->Drama->Culta->Ensayo->Lírico->Literatura->Sagas->Revista->Épico	 } 
+

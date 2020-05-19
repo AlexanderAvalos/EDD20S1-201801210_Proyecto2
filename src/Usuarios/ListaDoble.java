@@ -68,19 +68,6 @@ public class ListaDoble {
         }
     }
 
-    private Usuario get(int index) {
-        int fin = 0;
-        Usuario result = null;
-        NodoLista temporal = primero;
-
-        while (index < fin) {
-            result = temporal.getDato();
-            temporal = temporal.siguiente;
-
-        }
-        return result;
-    }
-
     public void borrar(int carnet) {
         NodoLista temporal = primero;
         while (temporal != null) {
@@ -106,13 +93,13 @@ public class ListaDoble {
         }
     }
 
-    boolean existe(int carnet
-    ) {
+    boolean existe(int carnet) {
         NodoLista temporal = primero;
         while (temporal != null) {
             if (temporal.getDato().getCarnet() == carnet) {
                 return true;
             }
+            temporal = temporal.siguiente;
         }
         return false;
     }
@@ -161,15 +148,15 @@ public class ListaDoble {
         String result = "";
         NodoLista temp = primero;
         while (temp != null) {
-            result += temp.getDato().getNombre() + " [label= \"Carnet: " + temp.getDato().getCarnet() + ", Password: " + getMD5(temp.getDato().getPass()) + "\"]; \n";
+            result += temp.getDato().getCarnet() + " [label= \"Carnet: " + temp.getDato().getCarnet() + ", Password: " + getMD5(temp.getDato().getPass()) + "\"]; \n";
             temp = temp.siguiente;
         }
         temp = primero;
         while (temp != null) {
             if (temp == primero) {
-                result += temp.getDato().getNombre();
+                result += temp.getDato().getCarnet();
             } else {
-                result += "-> " + temp.getDato().getNombre();
+                result += "-> " + temp.getDato().getCarnet();
             }
             temp = temp.siguiente;
         }

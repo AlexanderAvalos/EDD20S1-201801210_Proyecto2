@@ -31,35 +31,7 @@ public class TablaHash {
         numElementos = 0;
     }
 
-    public int posicionTabla(int id) {
-        int i = 0, p;
-        p = id % TAMTABLA;
-        if (p > TAMTABLA) {
-            while (p < TAMTABLA) {
-                p = TAMTABLA - p;
-            }
-        }
-        return p;
-    }
-
-    public static String getMD5(String input) {
-        try {
-            MessageDigest md = MessageDigest.getInstance("MD5");
-            byte[] messageDigest = md.digest(input.getBytes());
-            BigInteger number = new BigInteger(1, messageDigest);
-            String hashtext = number.toString(16);
-
-            while (hashtext.length() < 32) {
-                hashtext = "0" + hashtext;
-            }
-            return hashtext;
-        } catch (NoSuchAlgorithmException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
     public boolean existe(int id) {
-
         NodoTabla actual = Tabla[id];
         if (actual != null) {
             if (actual.eliminado) {
@@ -75,36 +47,39 @@ public class TablaHash {
     public void insertar(int id, Usuario valor) {
         if (!existe(id)) {
             NodoTabla nuevo = new NodoTabla(id, valor);
-            int posicion = posicionTabla(id);
-            Tabla[posicion] = nuevo;
-            Tabla[posicion].eliminado = false;
+            Tabla[id] = nuevo;
+            Tabla[id].eliminado = false;
             numElementos++;
         } else if (existe(id) == true) {
             ListaDoble lst = getUser(id);
             if (lst.existe(valor.getCarnet()) == false) {
                 lst.agregar(valor);
             } else {
-                lst.getUser(valor.getCarnet());
+                System.out.println("ya existe");
             }
         }
-    }
-
-    private ListaDoble getUser(int id) {
-        for (int i = 0; i < TAMTABLA; i++) {
-            if (Tabla[i] != null) {
-                if (Tabla[i].lst.buscar(id).getCarnet() == id) {
-                    Tabla[i].lst.imprimir();
-                    return Tabla[i].lst;
-                }
-            }
-        }
-        return null;
     }
 
     private void borrar(int id) {
         if (existe(id)) {
             Tabla[id] = null;
         }
+    }
+
+    public int posicionTabla(int carnet) {
+        int p = carnet % TAMTABLA;
+        return p;
+    }
+
+    private ListaDoble getUser(int id) {
+        for (int i = 0; i < TAMTABLA; i++) {
+            if (Tabla[i] != null) {
+                if (Tabla[i].id == id) {
+                    return Tabla[i].lst;
+                }
+            }
+        }
+        return null;
     }
 
     public NodoTabla Buscar(int id) {
@@ -131,7 +106,7 @@ public class TablaHash {
         sw.println("digraph G{ bgcolor = white \n node[fontcolor = \"black \", height = 0.5, color = \"gray \"] \n [shape=box, style=filled, color=gray] \n rankdir=UD \n edge  [color=\"black\", dir=fordware]");
         for (int i = 0; i < TAMTABLA; i++) {
             sw.print(i + "[style =\"filled\"; label=\"" + i + "\";pos= \"1,-" + cont + "! \"]\n");
-            cont++;
+            cont = cont + 2;
         }
         cont = 0;
         for (int i = 0; i < TAMTABLA; i++) {
@@ -154,21 +129,28 @@ public class TablaHash {
         }
         sw.println(";");
         cont = 0;
+        int cont3 = 5;
         if (cont2 == TAMTABLA - 1) {
             for (int i = 0; i < TAMTABLA; i++) {
                 if (Tabla[i] != null) {
                     ListaDoble lst = Tabla[i].lst;
-//                     pos= \""+ cont +",0! \"
                     if (lst.primero != null) {
-                        sw.println(lst.primero.getDato().getNombre() + "[pos= \"5,-" + cont + "! \"]\n");
+                        NodoLista aux = lst.primero;
+                        while (aux != null) {
+                            sw.println(aux.getDato().getCarnet() + "[pos= \"" + cont3 + ",-" + cont + "! \"]\n");
+                            cont3 = cont3 + 7;
+
+                            aux = aux.siguiente;
+                        }
+                        cont3 = 5;
                     }
                     if (lst.primero != null) {
-                        sw.println(Tabla[i].id + " -> " + lst.primero.getDato().getNombre() + ";");
+                        sw.println(Tabla[i].id + " -> " + lst.primero.getDato().getCarnet() + ";");
                         sw.println(lst.graficarLista());
                     }
 
                 }
-                cont++;
+                cont = cont + 2;
             }
         }
         sw.println("\t } \n");
@@ -191,8 +173,7 @@ public class TablaHash {
     public void eliminar(int carnet) {
         int id = posicionTabla(carnet);
         if (existe(id) == true) {
-            ListaDoble lst = getUser(carnet);
-            System.out.println(lst.primero.getDato().getCarnet());
+            ListaDoble lst = getUser(id);
             if (lst.existe(carnet) == true) {
                 lst.borrar(carnet);
             } else {

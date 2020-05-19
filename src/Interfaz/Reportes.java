@@ -134,16 +134,23 @@ public class Reportes extends javax.swing.JFrame {
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         try {
             Estructuras.getTablahash().printGraphviz();
-            Mostrar rep = new Mostrar();
-            rep.show(true);
-            this.hide();
         } catch (IOException ex) {
             Logger.getLogger(Reportes.class.getName()).log(Level.SEVERE, null, ex);
         }
+        Mostrar rep = new Mostrar();
+        rep.show(true);
+        this.hide();
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
-        // TODO add your handling code here:
+        try {
+            Estructuras.getLista().printGraphvizIn();
+        } catch (IOException ex) {
+            Logger.getLogger(Reportes.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        Mostrar rep = new Mostrar();
+        rep.show(true);
+        this.hide();
     }//GEN-LAST:event_jButton5ActionPerformed
 
     /**

@@ -3,20 +3,24 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package Block;
+package Interfaz;
 
+import Block.Nodo;
 import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
+import java.net.SocketException;
+import java.net.UnknownHostException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 
 /**
  *
  * @author Alex
  */
-public class NodoRed extends Thread{
+public class NodoRed extends Thread {
 
     private InetAddress direccion;
     private DatagramSocket socket;
@@ -25,7 +29,7 @@ public class NodoRed extends Thread{
         try {
             direccion = InetAddress.getByName("localhost");
             socket = new DatagramSocket();
-        } catch (Exception e) {
+        } catch (SocketException | UnknownHostException e) {
         }
     }
 
@@ -48,32 +52,36 @@ public class NodoRed extends Thread{
     public void run() {
         while (true) {
             try {
-                System.out.println("iniciando");
                 byte[] buffer = new byte[1024];
                 DatagramPacket peticion = new DatagramPacket(buffer, buffer.length);
                 socket.receive(peticion);
                 String mensaje = new String(peticion.getData());
-                System.out.println(mensaje);
+                JOptionPane.showMessageDialog(null, mensaje);
             } catch (IOException ex) {
                 Logger.getLogger(NodoRed.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
     }
 
-    public void enviar(int puerto, String ruta) throws IOException {
-        //recorrer lista simple con todos los puertos
-        byte[] buffer = new byte[1024];
-        buffer = ruta.getBytes();
-        DatagramPacket respuesta = new DatagramPacket(buffer, buffer.length, direccion, puerto);
-        socket.send(respuesta);
+    public void enviar(String ruta) throws IOException {
+        Nodo aux = Estructuras.getLista().getPrimero();
+        while (aux != null) {
+            byte[] buffer = new byte[1024];
+            buffer = ruta.getBytes();
+            if (aux.getSiguiente() != null) {
+                DatagramPacket respuesta = new DatagramPacket(buffer, buffer.length, direccion, aux.getSiguiente().getValor());
+                socket.send(respuesta);
+            }
+            aux = aux.getSiguiente();
+        }
+
     }
 
-    public void salir() throws IOException {
+    public void salir(int port) throws IOException {
         String accion = "Eliminar";
-        int puerto = 0; // recorrer lista simple
         byte[] buffer = new byte[1024];
         buffer = accion.getBytes();
-        DatagramPacket respuesta = new DatagramPacket(buffer, buffer.length, direccion, puerto);
+        DatagramPacket respuesta = new DatagramPacket(buffer, buffer.length, direccion, port);
         socket.send(respuesta);
     }
 

@@ -329,9 +329,9 @@ public class Mostrar extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton10ActionPerformed
 
     private void jButton11ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton11ActionPerformed
-        colocar("nodos.png");
+        colocar("Nodos.png");
         try {
-            File archivo = new File("nodos.png");
+            File archivo = new File("Nodos.png");
             Desktop.getDesktop().open(archivo);
         } catch (IOException ex) {
             Logger.getLogger(Mostrar.class.getName()).log(Level.SEVERE, null, ex);

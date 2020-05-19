@@ -636,7 +636,7 @@ public class Biblioteca extends javax.swing.JFrame {
 
     private void leerLibro(File archivo) throws FileNotFoundException, IOException, ParseException {
         JSONObject libro = new JSONObject();
-        libro = (JSONObject) parser.parse(new InputStreamReader(new FileInputStream(archivo.getPath()),"UTF-8"));
+        libro = (JSONObject) parser.parse(new InputStreamReader(new FileInputStream(archivo.getPath()), "UTF-8"));
         JSONArray books = (JSONArray) libro.get("libros");
         for (Object obj : books) {
             if (obj != null) {
@@ -677,19 +677,16 @@ public class Biblioteca extends javax.swing.JFrame {
         file.showOpenDialog(this);
         File archivo = file.getSelectedFile();
         if (archivo != null) {
-            if (archivo.getName().equals("Libros.json")) {
-                try {
-                    leerLibro(archivo);
-                    this.hide();
-                    Menu menu = new Menu();
-                    menu.show(true);
-                } catch (IOException ex) {
-                    System.out.println("error");
-                } catch (ParseException ex) {
-                    System.out.println("error");
-                }
-            } else {
-                JOptionPane.showMessageDialog(null, "Error de carga");
+            try {
+                leerLibro(archivo);
+                this.hide();
+                Menu menu = new Menu();
+                menu.show(true);
+            } catch (IOException ex) {
+                JOptionPane.showMessageDialog(null, "Error al leer libro");
+                System.out.println("error");
+            } catch (ParseException ex) {
+                System.out.println("error");
             }
         }
         refrescar();
@@ -748,9 +745,9 @@ public class Biblioteca extends javax.swing.JFrame {
             jTextArea4.append(" Categoria: " + categoria + '\n');
             jTextArea4.append(" Año: " + año + '\n');
             jTextArea4.append("\n");
-        }else{
+        } else {
             jTextArea4.setText("");
-         JOptionPane.showMessageDialog(null, "No existe libro");
+            JOptionPane.showMessageDialog(null, "No existe libro");
         }
     }//GEN-LAST:event_jButton7ActionPerformed
 

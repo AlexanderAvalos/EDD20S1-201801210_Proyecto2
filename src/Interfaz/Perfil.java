@@ -228,7 +228,6 @@ public class Perfil extends javax.swing.JFrame {
     }//GEN-LAST:event_formWindowOpened
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-
         Estructuras.getTablahash().eliminar(carne);
         JOptionPane.showMessageDialog(null, "Eliminado");
         Login main = new Login();
